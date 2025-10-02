@@ -1,4 +1,4 @@
-package br.com.tcg.pokemon.pokemontradecardgame
+package br.com.pokemon.tradecardgame
 
 import org.springframework.boot.autoconfigure.SpringBootApplication
 import org.springframework.boot.runApplication

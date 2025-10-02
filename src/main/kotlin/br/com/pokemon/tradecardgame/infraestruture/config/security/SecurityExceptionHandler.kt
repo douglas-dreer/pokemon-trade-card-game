@@ -1,6 +1,6 @@
-package br.com.tcg.pokemon.pokemontradecardgame.infraestruture.config.security
+package br.com.pokemon.tradecardgame.infraestruture.config.security
 
-import br.com.tcg.pokemon.pokemontradecardgame.infraestruture.dto.ErrorDetails
+import br.com.pokemon.tradecardgame.infraestruture.dto.ErrorDetails
 import jakarta.servlet.http.HttpServletRequest
 import jakarta.servlet.http.HttpServletResponse
 import org.springframework.security.access.AccessDeniedException

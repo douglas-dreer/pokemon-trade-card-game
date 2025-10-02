@@ -1,4 +1,4 @@
-package br.com.tcg.pokemon.pokemontradecardgame.infraestruture.dto
+package br.com.pokemon.tradecardgame.infraestruture.dto
 
 import com.google.gson.Gson
 import com.google.gson.JsonSyntaxException
