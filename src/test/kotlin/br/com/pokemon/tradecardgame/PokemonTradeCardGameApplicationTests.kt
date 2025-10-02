@@ -1,4 +1,4 @@
-package br.com.tcg.pokemon.pokemontradecardgame
+package br.com.pokemon.tradecardgame
 
 import org.junit.jupiter.api.Test
 import org.springframework.boot.test.context.SpringBootTest

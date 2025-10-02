@@ -1,4 +1,4 @@
-package br.com.tcg.pokemon.pokemontradecardgame.infraestruture.config.security
+package br.com.pokemon.tradecardgame.infraestruture.config.security
 
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration

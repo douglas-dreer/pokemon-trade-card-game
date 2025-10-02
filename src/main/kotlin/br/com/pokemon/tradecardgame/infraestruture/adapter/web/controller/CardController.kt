@@ -1,4 +1,4 @@
-package br.com.tcg.pokemon.pokemontradecardgame.infraestruture.adapter.web.controller
+package br.com.pokemon.tradecardgame.infraestruture.adapter.web.controller
 
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.GetMapping
