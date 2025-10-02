@@ -38,3 +38,10 @@ out/
 
 ### Kotlin ###
 .kotlin
+
+
+## Gradle files
+/gradle/*
+./gradlew
+./gradlew.bat
+

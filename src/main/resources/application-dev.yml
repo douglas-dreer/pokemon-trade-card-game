@@ -1,0 +1,22 @@
+spring:
+  datasource:
+    url: jdbc:postgresql://${DATABASE_HOST:localhost}:${DATABASE_PORT:5432}/${DATABASE_NAME:pokemon_tcg}
+    username: ${USERNAME_DB:pokemon_master}
+    password: '${PASSWORD_DB:g47Ne9C`G%om^g:#nN9~\neYTf0V9y-;pK£B1.tH#*<\FH`<>L}'
+    driver-class-name: org.postgresql.Driver
+  jpa:
+    hibernate:
+      ddl-auto: validate
+    show-sql: true
+    properties:
+      hibernate:
+        format_sql: true
+        highlight_sql: true
+    database-platform: org.hibernate.dialect.PostgreSQLDialect
+  flyway:
+    enabled: true
+    locations: classpath:db/migration
+server:
+  servlet:
+    context-path: /api
+  port: 8081
