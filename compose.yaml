@@ -28,6 +28,33 @@ services:
       - "8080:8080" # Porta padrão do Keycloak
     # Não precisa de volume no desenvolvimento inicial, mas seria bom em ambientes superiores.
 
+  # 📧 1. Zookeeper (Gerenciador de Estados do Kafka)
+  zookeeper:
+    image: confluentinc/cp-zookeeper:7.4.0 # Imagem estável
+    container_name: zookeeper-server
+    environment:
+      ZOOKEEPER_CLIENT_PORT: 2181
+      ZOOKEEPER_TICK_TIME: 2000
+
+  # 📧 2. Apache Kafka (Broker de Mensagens)
+  kafka:
+    image: confluentinc/cp-kafka:7.4.0 # Imagem estável
+    container_name: kafka-broker
+    ports:
+      - "9092:9092" # Porta de acesso da sua máquina (Host)
+    environment:
+      KAFKA_BROKER_ID: 1
+      KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181 # Conexão interna com o Zookeeper
+
+      # ⚠️ Configuração Crucial: Acesso Interno vs. Externo
+      # PLAINTEXT://kafka:29092  -> Comunicação interna entre containers
+      # PLAINTEXT_HOST://localhost:9092 -> Comunicação do seu Spring Boot (Host)
+      KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://kafka:29092,PLAINTEXT_HOST://localhost:9092
+      KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: PLAINTEXT:PLAINTEXT,PLAINTEXT_HOST:PLAINTEXT
+      KAFKA_INTER_BROKER_LISTENER_NAME: PLAINTEXT
+      KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
+    depends_on:
+      - zookeeper # Garante que o Zookeeper suba primeiro!
 
 # 💾 Definição de Volumes
 volumes:
