@@ -55,6 +55,17 @@ services:
       KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
     depends_on:
       - zookeeper # Garante que o Zookeeper suba primeiro!
+  # 👮 SonarQube (Análise Estática e Qualidade de Código)
+  sonarqube:
+    image: sonarqube:community # Versão estável e Community (Grátis)
+    container_name: sonarqube-analysis
+    ports:
+      - "9000:9000" # Porta de acesso à UI e à API de análise
+    environment:
+      # Configurações de Banco de Dados: Usando o banco interno (H2) por simplicidade em DEV.
+      # Em um ambiente real, você apontaria para uma instância dedicada do Postgres.
+      SONAR_ES_BOOTSTRAP_CHECKS_DISABLE: "true" # Necessário para rodar no Docker
+
 
 # 💾 Definição de Volumes
 volumes:
