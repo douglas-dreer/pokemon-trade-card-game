@@ -55,6 +55,9 @@ dependencies {
     developmentOnly("org.springframework.boot:spring-boot-devtools")
     developmentOnly("org.springframework.boot:spring-boot-docker-compose")
 
+    // ========== Gson =============
+    implementation("com.google.code.gson:gson:2.13.2")
+
     // ========== Testing ==========
     // JUnit & Spring Boot Test
     testImplementation("org.springframework.boot:spring-boot-starter-test")
