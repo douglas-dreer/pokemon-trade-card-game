@@ -15,6 +15,20 @@ services:
     volumes:
       - postgres_data:/var/lib/postgresql/data # Persistência de dados
 
+  # 🔐 Keycloak (Servidor de Identidade OIDC/OAuth2)
+  keycloak:
+    image: quay.io/keycloak/keycloak:23.0.7 # Versão estável e robusta
+    container_name: keycloak-auth
+    # O comando 'start-dev' facilita o desenvolvimento local
+    command: start-dev
+    environment:
+      KEYCLOAK_ADMIN: pokemon_master
+      KEYCLOAK_ADMIN_PASSWORD: 064[ufsiuh"c5M!]Ph.wH&V4yG[s!i=`Xk767*[|e£?oiU(qTD
+    ports:
+      - "8080:8080" # Porta padrão do Keycloak
+    # Não precisa de volume no desenvolvimento inicial, mas seria bom em ambientes superiores.
+
+
 # 💾 Definição de Volumes
 volumes:
   postgres_data:
