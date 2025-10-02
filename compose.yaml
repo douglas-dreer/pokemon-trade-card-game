@@ -8,7 +8,7 @@ services:
     restart: always
     environment:
       POSTGRES_USER: pokemon_master
-      POSTGRES_PASSWORD: qsE8j{xAsfK`H!Nc1S5nF;F55[y$S<+;WQqC*~YZ$Jk£,.UOh$
+      POSTGRES_PASSWORD: g47Ne9C`G%om^g:#nN9~\neYTf0V9y-;pK£B1.tH#*<\FH`<>L
       POSTGRES_DB: pokemon_tcg
     ports:
       - "5432:5432"
