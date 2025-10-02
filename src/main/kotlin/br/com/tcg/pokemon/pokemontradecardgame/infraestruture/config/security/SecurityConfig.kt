@@ -1,4 +1,4 @@
-package br.com.tcg.pokemon.pokemontradecardgame.infraestruture.config
+package br.com.tcg.pokemon.pokemontradecardgame.infraestruture.config.security
 
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
@@ -9,18 +9,27 @@ import org.springframework.security.web.SecurityFilterChain
 
 @Configuration
 @EnableWebSecurity
-class SecurityConfig {
+class SecurityConfig(
+    private val securityExceptionHandler: SecurityExceptionHandler
+) {
 
     @Bean
     fun securityFilterChain(http: HttpSecurity): SecurityFilterChain {
         http {
             csrf { disable() }
+
             authorizeHttpRequests {
                 authorize("/actuator/health", permitAll)
                 authorize("/actuator/info", permitAll)
                 authorize(anyRequest, authenticated)
             }
-            oauth2ResourceServer { jwt { } }
+
+            oauth2ResourceServer {
+                jwt {
+                    authenticationEntryPoint = securityExceptionHandler
+                    accessDeniedHandler = securityExceptionHandler
+                }
+            }
         }
         return http.build()
     }
