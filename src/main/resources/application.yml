@@ -20,6 +20,11 @@ spring:
     enabled: true
     locations: classpath:db.imigration
 
+  security:
+    oauth2:
+      resourceserver:
+        jwt:
+          issuer-uri: ${AUTH_SERVER_URL}
   cache:
     type: caffeine
     caffeine:
@@ -33,15 +38,9 @@ management:
     health:
       show-details: always
 
+
 logging:
   level:
     br.com.supermercado.estoque: INFO
     org.springframework.web: INFO
     org.hibernate.SQL: DEBUG
-
-app:
-  database:
-    pool:
-      max-size: 10
-      min-idle: 2
-      max-lifetime: 300000

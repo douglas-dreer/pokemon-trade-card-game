@@ -33,6 +33,7 @@ dependencies {
 
     // ========== Security ==========
     implementation("org.springframework.security:spring-security-oauth2-resource-server")
+    implementation("org.springframework.security:spring-security-oauth2-jose")
 
     // ========== Database & Migrations ==========
     runtimeOnly("org.postgresql:postgresql")
