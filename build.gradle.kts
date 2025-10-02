@@ -25,30 +25,52 @@ extra["snippetsDir"] = file("build/generated-snippets")
 extra["springCloudVersion"] = "2025.0.0"
 
 dependencies {
-    implementation("org.springframework.boot:spring-boot-starter-actuator")
-    implementation("org.springframework.boot:spring-boot-starter-data-jpa")
-    implementation("org.springframework.boot:spring-boot-starter-security")
+    // ========== Spring Boot Starters ==========
     implementation("org.springframework.boot:spring-boot-starter-web")
-    implementation("com.fasterxml.jackson.module:jackson-module-kotlin")
-    implementation("org.apache.kafka:kafka-streams")
-    implementation("org.jetbrains.kotlin:kotlin-reflect")
-    implementation("org.springframework.cloud:spring-cloud-starter-openfeign")
-    implementation("org.springframework.kafka:spring-kafka")
+    implementation("org.springframework.boot:spring-boot-starter-data-jpa")
+    implementation("org.springframework.boot:spring-boot-starter-actuator")
+    implementation("org.springframework.boot:spring-boot-starter-security")
 
-    // Flyway
+    // ========== Security ==========
+    implementation("org.springframework.security:spring-security-oauth2-resource-server")
+
+    // ========== Database & Migrations ==========
+    runtimeOnly("org.postgresql:postgresql")
     implementation("org.flywaydb:flyway-core")
     implementation("org.flywaydb:flyway-database-postgresql:11.7.2")
 
+    // ========== Messaging (Kafka) ==========
+    implementation("org.apache.kafka:kafka-streams")
+    implementation("org.springframework.kafka:spring-kafka")
+
+    // ========== HTTP Client ==========
+    implementation("org.springframework.cloud:spring-cloud-starter-openfeign")
+
+    // ========== Kotlin ==========
+    implementation("org.jetbrains.kotlin:kotlin-reflect")
+    implementation("com.fasterxml.jackson.module:jackson-module-kotlin")
+
+    // ========== Development Tools ==========
     developmentOnly("org.springframework.boot:spring-boot-devtools")
     developmentOnly("org.springframework.boot:spring-boot-docker-compose")
-    runtimeOnly("org.postgresql:postgresql")
+
+    // ========== Testing ==========
+    // JUnit & Spring Boot Test
     testImplementation("org.springframework.boot:spring-boot-starter-test")
     testImplementation("org.jetbrains.kotlin:kotlin-test-junit5")
-    testImplementation("org.springframework.kafka:spring-kafka-test")
-    testImplementation("org.springframework.restdocs:spring-restdocs-mockmvc")
-    testImplementation("org.springframework.security:spring-security-test")
-    testImplementation("com.h2database:h2")
     testRuntimeOnly("org.junit.platform:junit-platform-launcher")
+
+    // Spring Security Test
+    testImplementation("org.springframework.security:spring-security-test")
+
+    // Kafka Test
+    testImplementation("org.springframework.kafka:spring-kafka-test")
+
+    // REST Docs
+    testImplementation("org.springframework.restdocs:spring-restdocs-mockmvc")
+
+    // H2 Database (in-memory para testes)
+    testImplementation("com.h2database:h2")
 }
 
 dependencyManagement {
