@@ -2,7 +2,7 @@ package br.com.pokemon.tradecardgame.domain.model
 
 import br.com.pokemon.tradecardgame.domain.enums.RarityType
 import java.time.LocalDateTime
-import java.util.UUID
+import java.util.*
 
 /**
  * Represents a trading card with associated metadata for collectibles.
