@@ -37,8 +37,6 @@ management:
   endpoint:
     health:
       show-details: always
-
-
 logging:
   level:
     br.com.supermercado.estoque: INFO

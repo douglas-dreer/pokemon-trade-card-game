@@ -1,3 +1,5 @@
+val springdocVersion = "2.8.13"
+
 plugins {
     kotlin("jvm") version "1.9.25"
     kotlin("plugin.spring") version "1.9.25"
@@ -50,6 +52,9 @@ dependencies {
     // ========== Kotlin ==========
     implementation("org.jetbrains.kotlin:kotlin-reflect")
     implementation("com.fasterxml.jackson.module:jackson-module-kotlin")
+
+     // ========== OpenAPI/Swagger ==========
+    implementation("org.springdoc:springdoc-openapi-starter-webmvc-ui:${springdocVersion}")
 
     // ========== Development Tools ==========
     developmentOnly("org.springframework.boot:spring-boot-devtools")

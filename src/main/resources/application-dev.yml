@@ -3,7 +3,7 @@ spring:
     oauth2:
       resourceserver:
         jwt:
-          issuer-uri: ${AUTH_SERVER_URL:localhost:8080/auth/realms/pokemon-tcg}
+          issuer-uri: ${AUTH_SERVER_URL:http://localhost:8080/realms/pokemon-tcg}
   datasource:
     url: jdbc:postgresql://${DATABASE_HOST:localhost}:${DATABASE_PORT:5432}/${DATABASE_NAME:pokemon_tcg}
     username: ${USERNAME_DB:pokemon_master}
@@ -11,7 +11,7 @@ spring:
     driver-class-name: org.postgresql.Driver
   jpa:
     hibernate:
-      ddl-auto: validate
+      ddl-auto: create-drop
     show-sql: true
     properties:
       hibernate:
@@ -23,5 +23,5 @@ spring:
     locations: classpath:db/migration
 server:
   servlet:
-    context-path: /api
+    context-path: /api/v1
   port: 8081
