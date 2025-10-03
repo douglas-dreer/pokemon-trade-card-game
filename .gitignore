@@ -45,3 +45,6 @@ out/
 ./gradlew
 ./gradlew.bat
 
+### Kiro
+./.kiro/**
+
