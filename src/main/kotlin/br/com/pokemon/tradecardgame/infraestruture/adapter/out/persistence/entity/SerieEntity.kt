@@ -8,22 +8,21 @@ import java.time.LocalDateTime
 import java.util.*
 
 /**
- * Entity class representing a card series in the persistence layer.
+ * Represents the database entity for a collectible card series.
  *
- * Maps to the "series" table in the database and holds information about
- * a collectible card series, including its unique identifier, code, name,
- * release year, associated expansions, and metadata such as creation and
- * update timestamps. Used to interact with the database and bridge the gap
- * between the domain and persistence layers.
+ * This class is used to persist and retrieve series-related data from the database. It encapsulates
+ * the properties and mappings required for the `series` table, including unique constraints,
+ * column configurations, and timestamps for tracking entity creation and updates. It also includes
+ * functionality for transforming the entity into its corresponding domain model representation.
  *
  * @property id The unique identifier for the series, generated as a UUID.
- * @property code A unique string code representing the series, must be non-null and unique.
- * @property name The name of the series, must be non-null.
- * @property releaseYear The release year of the series, must be non-null.
- * @property imageUrl An optional URL pointing to an image representing the series.
- * @property expansions An optional string representation of expansions related to the series.
- * @property createdAt A timestamp indicating when the record was created, generated automatically.
- * @property updatedAt A timestamp indicating the last time the record was updated, generated automatically.
+ * @property code A unique code representing the series, constrained to a maximum of 10 characters.
+ * @property name The name of the series, constrained to a maximum of 100 characters.
+ * @property releaseYear The year when the series was released, constrained to 4 digits.
+ * @property imageUrl An optional URL associated with the image resource for the series, constrained to a maximum of 255 characters.
+ * @property expansions Additional information about expansions related to the series, constrained to a maximum of 255 characters.
+ * @property createdAt The timestamp indicating when the entity was created, automatically populated and non-updatable.
+ * @property updatedAt The timestamp indicating when the entity was last updated, automatically populated upon updates.
  */
 @Entity
 @Table(name = "series")

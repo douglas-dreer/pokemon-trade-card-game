@@ -1,15 +1,17 @@
 package br.com.pokemon.tradecardgame.domain.exception
 
-import java.util.*
+import java.util.UUID
 
 /**
- * Indica que uma série com o nome especificado não foi encontrada no sistema.
+ * Indicates that a specific series was not found in the system.
  *
- * Essa exceção é lançada quando uma tentativa é feita para acessar ou manipular uma
- * série inexistente, impedindo operações em dados que não estão cadastrados no aplicativo.
+ * This exception is typically thrown when an operation attempts to access a series
+ * identified by a unique identifier (UUID) that does not exist in the system. It serves
+ * to notify clients of the application that the requested series could not be located,
+ * ensuring clear communication about the issue.
  *
- * @constructor Cria uma nova [SeriesNotFoundException].
- * @param name Nome da série que não foi encontrada no sistema.
+ * @constructor Creates a new [SeriesNotFoundException].
+ * @param id The unique identifier of the series that was not found.
  */
 class SeriesNotFoundException(
     id: UUID

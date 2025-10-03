@@ -1,6 +1,5 @@
 package br.com.pokemon.tradecardgame.domain.port.`in`.serie.command
 
-import br.com.pokemon.tradecardgame.domain.enums.RarityType
 import br.com.pokemon.tradecardgame.domain.model.Expansion
 import br.com.pokemon.tradecardgame.domain.model.Serie
 import br.com.pokemon.tradecardgame.infraestruture.adapter.out.persistence.entity.SerieEntity
@@ -8,20 +7,20 @@ import java.time.LocalDateTime
 import java.util.*
 
 /**
- * Command data class for updating an existing series.
+ * Represents a command used to update the details of a collectible card series.
  *
- * This class is used to encapsulate the required and optional attributes needed to
- * update a series within the domain layer. It transfers data from external input
- * sources to the application's business logic. The command includes properties
- * such as a unique identifier, code, name, rarity, an optional image URL, and the
- * associated expansion data.
+ * This data class encapsulates the information required to update an existing series,
+ * including its identifier, code, name, release year, image URL, and associated expansions.
+ * The `UpdateSerieCommand` is typically used to transfer updates from external layers (e.g., APIs)
+ * to the domain or persistence layers.
  *
- * @property id The unique identifier of the series to be updated.
- * @property code The code that uniquely identifies the series.
+ * @property id The unique identifier of the series being updated, nullable for scenarios where the ID
+ * is optional.
+ * @property code A unique code representing the series.
  * @property name The name of the series.
- * @property rarity The rarity type associated with the series, represented by [RarityType].
- * @property imageUrl An optional URL pointing to an image representing the series.
- * @property expansion An [Expansion] instance related to this series.
+ * @property releaseYear The year when the series was originally released.
+ * @property imageUrl An optional URL pointing to an image for the series.
+ * @property expansions A list of expansions belonging to the series, defaulting to an empty list.
  */
 data class UpdateSerieCommand(
     val id: UUID?,
