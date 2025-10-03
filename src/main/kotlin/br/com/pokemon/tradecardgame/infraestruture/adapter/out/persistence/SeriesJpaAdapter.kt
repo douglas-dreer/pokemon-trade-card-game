@@ -6,7 +6,7 @@ import br.com.pokemon.tradecardgame.infraestruture.adapter.out.persistence.repos
 import org.springframework.data.domain.Page
 import org.springframework.data.domain.PageRequest
 import org.springframework.stereotype.Repository
-import java.util.UUID
+import java.util.*
 
 
 /**
@@ -37,7 +37,7 @@ class SeriesJpaAdapter(
         pageSize: Int
     ): Page<SerieEntity> {
         val pageable = PageRequest.of(page, pageSize)
-        return springRepository.findAll(pageable);
+        return springRepository.findAll(pageable)
     }
 
     /**

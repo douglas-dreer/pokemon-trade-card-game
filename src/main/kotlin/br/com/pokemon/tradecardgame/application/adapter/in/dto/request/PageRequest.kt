@@ -9,7 +9,8 @@ data class PageRequest(
     val direction: String?
 ) {
     init {
-        page = if (page > 0) page -1 else 0
+        page = if (page > 0) page - 1 else 0
     }
+
     fun toQuery() = FindAllSerieQuery(page, pageSize)
 }

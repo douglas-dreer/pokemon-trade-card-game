@@ -1,17 +1,11 @@
 package br.com.pokemon.tradecardgame.infraestruture.adapter.out.persistence.entity
 
 import br.com.pokemon.tradecardgame.domain.model.Serie
-import jakarta.persistence.Column
-import jakarta.persistence.Entity
-import jakarta.persistence.GeneratedValue
-import jakarta.persistence.GenerationType
-import jakarta.persistence.Id
-import jakarta.persistence.SequenceGenerator
-import jakarta.persistence.Table
+import jakarta.persistence.*
 import org.hibernate.annotations.CreationTimestamp
 import org.hibernate.annotations.UpdateTimestamp
 import java.time.LocalDateTime
-import java.util.UUID
+import java.util.*
 
 /**
  * Entity class representing a card series in the persistence layer.
@@ -61,7 +55,7 @@ data class SerieEntity(
     @UpdateTimestamp
     @Column(name = "updated_at", nullable = false)
     val updatedAt: LocalDateTime? = LocalDateTime.now()
-){
+) {
     /**
      * Maps the current [SerieEntity] instance to its corresponding domain model [Serie].
      *

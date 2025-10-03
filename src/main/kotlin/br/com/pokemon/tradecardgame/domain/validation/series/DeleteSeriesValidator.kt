@@ -1,15 +1,12 @@
 package br.com.pokemon.tradecardgame.domain.validation.series
 
 import br.com.pokemon.tradecardgame.application.validation.DeleteValidation
-import br.com.pokemon.tradecardgame.domain.exception.InvalidDataException
 import br.com.pokemon.tradecardgame.domain.exception.SeriesNotFoundException
-import br.com.pokemon.tradecardgame.domain.model.Serie
 import br.com.pokemon.tradecardgame.domain.validation.SerieValidator
 import br.com.pokemon.tradecardgame.domain.validation.ValidatorStrategy
 import br.com.pokemon.tradecardgame.infraestruture.adapter.out.persistence.SeriesJpaAdapter
-import org.springframework.data.jpa.domain.AbstractPersistable_.id
 import org.springframework.stereotype.Component
-import java.util.UUID
+import java.util.*
 
 /**
  * Validator class responsible for validating series entities during the deletion operation.
@@ -27,9 +24,9 @@ import java.util.UUID
  */
 @Component
 @DeleteValidation
-class DeleteSeriesValidator (
+class DeleteSeriesValidator(
     private val repository: SeriesJpaAdapter
-): SerieValidator(), ValidatorStrategy<UUID> {
+) : SerieValidator(), ValidatorStrategy<UUID> {
     /**
      * Validates the provided series identifier for deletion by ensuring the series exists in the repository.
      * If the series is not found, a [SeriesNotFoundException] is thrown.

@@ -1,6 +1,5 @@
 package br.com.pokemon.tradecardgame.domain.port.`in`.serie.command
 
-import br.com.pokemon.tradecardgame.domain.enums.RarityType
 import br.com.pokemon.tradecardgame.domain.model.Expansion
 import br.com.pokemon.tradecardgame.domain.model.Serie
 import br.com.pokemon.tradecardgame.infraestruture.adapter.out.persistence.entity.SerieEntity

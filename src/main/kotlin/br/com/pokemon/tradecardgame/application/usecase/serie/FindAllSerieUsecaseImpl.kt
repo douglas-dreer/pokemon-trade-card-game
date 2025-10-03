@@ -23,7 +23,7 @@ import org.springframework.stereotype.Service
 @Service
 class FindAllSerieUsecaseImpl(
     private val repository: SerieRepositoryPort
-): FindAllSerieUsecase {
+) : FindAllSerieUsecase {
     /**
      * Executes the process of retrieving a paginated list of `Serie` domain objects based on the given query parameters.
      *

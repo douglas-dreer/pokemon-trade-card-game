@@ -1,6 +1,6 @@
 package br.com.pokemon.tradecardgame.domain.exception
 
-import java.util.UUID
+import java.util.*
 
 /**
  * Indica que uma série com o nome especificado não foi encontrada no sistema.
@@ -13,5 +13,4 @@ import java.util.UUID
  */
 class SeriesNotFoundException(
     id: UUID
-): DomainException("The series '$id' was not found in the system.") {
-}
+) : DomainException("The series '$id' was not found in the system.")

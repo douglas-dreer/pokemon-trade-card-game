@@ -2,8 +2,7 @@ package br.com.pokemon.tradecardgame.application.adapter.`in`.dto.request
 
 import br.com.pokemon.tradecardgame.domain.model.Expansion
 import br.com.pokemon.tradecardgame.domain.port.`in`.serie.command.UpdateSerieCommand
-import java.time.LocalDateTime
-import java.util.UUID
+import java.util.*
 
 /**
  * Represents a request to update an existing `Serie`.
@@ -35,6 +34,7 @@ data class UpdateSerieRequest(
         require(name.isNotBlank()) { "Name must not be blank" }
         require(releaseYear > 1998) { "Release year must be greater than 1998" }
     }
+
     /**
      * Converts the current `UpdateSerieRequest` instance to an `UpdateSerieCommand`.
      *

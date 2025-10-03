@@ -1,9 +1,8 @@
 package br.com.pokemon.tradecardgame.domain.model
 
 import com.google.gson.Gson
-import com.nimbusds.jose.util.JSONObjectUtils.getJSONObject
 import java.time.LocalDateTime
-import java.util.UUID
+import java.util.*
 
 /**
  * Represents a set of trading cards grouped as an expansion within a series.

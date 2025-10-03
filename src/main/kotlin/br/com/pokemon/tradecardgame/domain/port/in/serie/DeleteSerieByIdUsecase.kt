@@ -1,7 +1,7 @@
 package br.com.pokemon.tradecardgame.domain.port.`in`.serie
 
 import br.com.pokemon.tradecardgame.domain.port.`in`.serie.command.DeleteSerieByIdCommand
-import java.util.UUID
+import java.util.*
 
 /**
  * Defines the use case for deleting a `Serie` by its unique identifier.

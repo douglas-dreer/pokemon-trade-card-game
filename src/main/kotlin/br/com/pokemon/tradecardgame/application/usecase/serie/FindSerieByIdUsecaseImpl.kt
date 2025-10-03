@@ -24,7 +24,7 @@ import org.springframework.stereotype.Service
 @Service
 class FindSerieByIdUsecaseImpl(
     private val repository: SerieRepositoryPort
-): FindSerieByIdUsecase {
+) : FindSerieByIdUsecase {
     /**
      * Executes the operation to retrieve a series by its unique identifier.
      *

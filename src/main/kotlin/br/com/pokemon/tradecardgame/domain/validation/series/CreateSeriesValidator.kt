@@ -12,7 +12,7 @@ import org.springframework.stereotype.Component
 @CreateValidation
 class CreateSeriesValidator(
     private val repository: SeriesJpaAdapter
-): SerieValidator(), ValidatorStrategy<Serie>{
+) : SerieValidator(), ValidatorStrategy<Serie> {
     /**
      * Validates the given series and ensures that there are no duplications with existing series
      * based on the code or name. If a series with the same code or name already exists, an exception
@@ -22,11 +22,11 @@ class CreateSeriesValidator(
      * @throws SeriesAlreadyExistsException if a series with the same code or name already exists.
      */
     override fun execute(item: Serie) {
-        if (super.checkIfExistSerieWithSameCode(item.code, repository)){
+        if (super.checkIfExistSerieWithSameCode(item.code, repository)) {
             throw SeriesAlreadyExistsException(item.code)
         }
 
-        if (super.checkIfExistSerieWithSameName(item.name, repository)){
+        if (super.checkIfExistSerieWithSameName(item.name, repository)) {
             throw SeriesAlreadyExistsException(item.name)
         }
     }

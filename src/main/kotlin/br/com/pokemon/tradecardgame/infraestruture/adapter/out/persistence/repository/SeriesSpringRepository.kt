@@ -9,7 +9,7 @@ import java.util.*
  * Extends the Spring Data JPA `JpaRepository` to provide CRUD operations
  * and additional custom queries for the `SerieEntity` type.
  */
-interface SeriesSpringRepository: JpaRepository<SerieEntity, UUID> {
+interface SeriesSpringRepository : JpaRepository<SerieEntity, UUID> {
     /**
      * Retrieves a series entity based on its unique code.
      *

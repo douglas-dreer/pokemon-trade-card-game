@@ -7,7 +7,7 @@ import br.com.pokemon.tradecardgame.domain.port.`in`.serie.UpdateSerieByIdUsecas
 import br.com.pokemon.tradecardgame.domain.port.`in`.serie.command.UpdateSerieCommand
 import br.com.pokemon.tradecardgame.domain.validation.ValidatorStrategy
 import org.springframework.stereotype.Service
-import java.util.UUID
+import java.util.*
 
 /**
  * Implementation of the `FindSerieByIdUsecase` interface responsible for retrieving
@@ -29,9 +29,9 @@ class UpdateSerieByIdUsecaseImpl(
     private val repository: SerieRepositoryPort,
     @UpdateValidation
     private val validator: List<ValidatorStrategy<Serie>>
-): UpdateSerieByIdUsecase {
+) : UpdateSerieByIdUsecase {
     override fun execute(id: UUID, command: UpdateSerieCommand): Serie {
-        executeValitation(id,command.toDomain())
+        executeValitation(id, command.toDomain())
         return repository.updateSerie(command.toEntity()).toDomain()
     }
 

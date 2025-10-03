@@ -12,5 +12,4 @@ package br.com.pokemon.tradecardgame.domain.exception
  */
 class SeriesAlreadyExistsException(
     name: String
-): DomainException("The series '$name' already exists in the system.") {
-}
+) : DomainException("The series '$name' already exists in the system.")

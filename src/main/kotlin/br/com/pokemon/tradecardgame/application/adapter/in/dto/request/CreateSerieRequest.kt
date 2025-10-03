@@ -2,7 +2,6 @@ package br.com.pokemon.tradecardgame.application.adapter.`in`.dto.request
 
 import br.com.pokemon.tradecardgame.domain.model.Expansion
 import br.com.pokemon.tradecardgame.domain.port.`in`.serie.command.CreateSerieCommand
-import java.time.LocalDateTime
 
 /**
  * Represents a request to create a new `Serie`.
@@ -30,6 +29,7 @@ data class CreateSerieRequest(
         require(name.isNotBlank()) { "Name must not be blank" }
         require(releaseYear > 1998) { "Release year must be greater than 1998" }
     }
+
     /**
      * Converts the current `CreateSerieRequest` instance to a `CreateSerieCommand`.
      *

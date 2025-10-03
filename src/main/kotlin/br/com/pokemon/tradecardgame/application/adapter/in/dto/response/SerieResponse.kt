@@ -2,7 +2,7 @@ package br.com.pokemon.tradecardgame.application.adapter.`in`.dto.response
 
 import br.com.pokemon.tradecardgame.domain.model.Expansion
 import java.time.LocalDateTime
-import java.util.UUID
+import java.util.*
 
 /**
  * Represents the response model for a collectible card series.

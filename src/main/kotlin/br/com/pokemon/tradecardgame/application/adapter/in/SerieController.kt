@@ -21,9 +21,8 @@ import io.swagger.v3.oas.annotations.security.SecurityRequirement
 import io.swagger.v3.oas.annotations.tags.Tag
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.*
-import org.springframework.data.domain.Pageable // Importar o Pageable do Spring Data
 import java.net.URI
-import java.util.UUID
+import java.util.*
 
 @RestController
 @RequestMapping("/series")
@@ -44,12 +43,16 @@ class SerieController(
         summary = "Listar todas as séries (Paginado)",
         description = "Recupera todas as séries de forma paginada. Use 'page' e 'size' como parâmetros de query."
     )
-    @ApiResponses(value = [
-        ApiResponse(responseCode = "200", description = "Lista de séries retornada com sucesso",
-            content = [Content(schema = Schema(implementation = PageResponse::class))]),
-        ApiResponse(responseCode = "401", description = "Não Autorizado (Token ausente ou inválido)"),
-        ApiResponse(responseCode = "403", description = "Acesso Negado (Permissões insuficientes)")
-    ])
+    @ApiResponses(
+        value = [
+            ApiResponse(
+                responseCode = "200", description = "Lista de séries retornada com sucesso",
+                content = [Content(schema = Schema(implementation = PageResponse::class))]
+            ),
+            ApiResponse(responseCode = "401", description = "Não Autorizado (Token ausente ou inválido)"),
+            ApiResponse(responseCode = "403", description = "Acesso Negado (Permissões insuficientes)")
+        ]
+    )
     // Corrigido: GET não deve usar @RequestBody. O Pageable já resolve isso.
     fun findAllSeries(
         @Parameter(hidden = true) // O Spring Doc já infere o Pageable, escondemos o DTO original
@@ -66,12 +69,16 @@ class SerieController(
         summary = "Buscar série por ID",
         description = "Recupera uma série específica pelo seu identificador único."
     )
-    @ApiResponses(value = [
-        ApiResponse(responseCode = "200", description = "Série encontrada",
-            content = [Content(schema = Schema(implementation = SerieResponse::class))]),
-        ApiResponse(responseCode = "404", description = "Série não encontrada (ID inexistente)"),
-        ApiResponse(responseCode = "401", description = "Não Autorizado")
-    ])
+    @ApiResponses(
+        value = [
+            ApiResponse(
+                responseCode = "200", description = "Série encontrada",
+                content = [Content(schema = Schema(implementation = SerieResponse::class))]
+            ),
+            ApiResponse(responseCode = "404", description = "Série não encontrada (ID inexistente)"),
+            ApiResponse(responseCode = "401", description = "Não Autorizado")
+        ]
+    )
     fun findSerieById(
         @Parameter(description = "UUID da série a ser buscada")
         @PathVariable("id") serieId: UUID
@@ -85,12 +92,16 @@ class SerieController(
         summary = "Buscar série por código",
         description = "Recupera uma série pelo seu código exclusivo."
     )
-    @ApiResponses(value = [
-        ApiResponse(responseCode = "200", description = "Série encontrada",
-            content = [Content(schema = Schema(implementation = SerieResponse::class))]),
-        ApiResponse(responseCode = "404", description = "Série não encontrada (Código inexistente)"),
-        ApiResponse(responseCode = "401", description = "Não Autorizado")
-    ])
+    @ApiResponses(
+        value = [
+            ApiResponse(
+                responseCode = "200", description = "Série encontrada",
+                content = [Content(schema = Schema(implementation = SerieResponse::class))]
+            ),
+            ApiResponse(responseCode = "404", description = "Série não encontrada (Código inexistente)"),
+            ApiResponse(responseCode = "401", description = "Não Autorizado")
+        ]
+    )
     fun findSerieByCode(
         @Parameter(description = "Código da série (Ex: 'SWSH')")
         @RequestParam(name = "code", required = true) serieCode: String
@@ -104,15 +115,19 @@ class SerieController(
         summary = "Criar nova série",
         description = "Cria uma nova série no sistema. Validação de dados de entrada e regras de negócio aplicadas."
     )
-    @ApiResponses(value = [
-        ApiResponse(responseCode = "201", description = "Série criada com sucesso",
-            content = [Content(schema = Schema(implementation = SerieResponse::class))]),
-        ApiResponse(responseCode = "400", description = "Requisição Inválida (Validação de dados)"),
-        // Adicionando o erro de conflito, crucial para criação de recursos únicos
-        ApiResponse(responseCode = "409", description = "Conflito: Série com código ou nome já existe"),
-        ApiResponse(responseCode = "401", description = "Não Autorizado"),
-        ApiResponse(responseCode = "403", description = "Acesso Negado (Permissões insuficientes)")
-    ])
+    @ApiResponses(
+        value = [
+            ApiResponse(
+                responseCode = "201", description = "Série criada com sucesso",
+                content = [Content(schema = Schema(implementation = SerieResponse::class))]
+            ),
+            ApiResponse(responseCode = "400", description = "Requisição Inválida (Validação de dados)"),
+            // Adicionando o erro de conflito, crucial para criação de recursos únicos
+            ApiResponse(responseCode = "409", description = "Conflito: Série com código ou nome já existe"),
+            ApiResponse(responseCode = "401", description = "Não Autorizado"),
+            ApiResponse(responseCode = "403", description = "Acesso Negado (Permissões insuficientes)")
+        ]
+    )
     fun createSerie(
         @RequestBody createSerieRequest: CreateSerieRequest
     ): ResponseEntity<SerieResponse> {
@@ -128,14 +143,18 @@ class SerieController(
         summary = "Atualizar série existente",
         description = "Atualiza os dados de uma série já cadastrada pelo seu ID."
     )
-    @ApiResponses(value = [
-        ApiResponse(responseCode = "200", description = "Série atualizada com sucesso",
-            content = [Content(schema = Schema(implementation = SerieResponse::class))]),
-        ApiResponse(responseCode = "400", description = "Requisição Inválida (Validação de dados)"),
-        ApiResponse(responseCode = "404", description = "Série não encontrada (ID inexistente)"),
-        ApiResponse(responseCode = "401", description = "Não Autorizado"),
-        ApiResponse(responseCode = "403", description = "Acesso Negado (Permissões insuficientes)")
-    ])
+    @ApiResponses(
+        value = [
+            ApiResponse(
+                responseCode = "200", description = "Série atualizada com sucesso",
+                content = [Content(schema = Schema(implementation = SerieResponse::class))]
+            ),
+            ApiResponse(responseCode = "400", description = "Requisição Inválida (Validação de dados)"),
+            ApiResponse(responseCode = "404", description = "Série não encontrada (ID inexistente)"),
+            ApiResponse(responseCode = "401", description = "Não Autorizado"),
+            ApiResponse(responseCode = "403", description = "Acesso Negado (Permissões insuficientes)")
+        ]
+    )
     fun updateSerie(
         @Parameter(description = "UUID da série a ser atualizada")
         @PathVariable("id") serieId: UUID,
@@ -151,13 +170,17 @@ class SerieController(
         summary = "Deletar série",
         description = "Remove uma série existente pelo seu ID."
     )
-    @ApiResponses(value = [
-        ApiResponse(responseCode = "200", description = "Série deletada com sucesso",
-            content = [Content(schema = Schema(implementation = SuccessResponse::class))]),
-        ApiResponse(responseCode = "404", description = "Série não encontrada (ID inexistente)"),
-        ApiResponse(responseCode = "401", description = "Não Autorizado"),
-        ApiResponse(responseCode = "403", description = "Acesso Negado (Permissões insuficientes)")
-    ])
+    @ApiResponses(
+        value = [
+            ApiResponse(
+                responseCode = "200", description = "Série deletada com sucesso",
+                content = [Content(schema = Schema(implementation = SuccessResponse::class))]
+            ),
+            ApiResponse(responseCode = "404", description = "Série não encontrada (ID inexistente)"),
+            ApiResponse(responseCode = "401", description = "Não Autorizado"),
+            ApiResponse(responseCode = "403", description = "Acesso Negado (Permissões insuficientes)")
+        ]
+    )
     fun deleteSerieById(
         @Parameter(description = "UUID da série a ser deletada")
         @PathVariable("id") serieId: UUID

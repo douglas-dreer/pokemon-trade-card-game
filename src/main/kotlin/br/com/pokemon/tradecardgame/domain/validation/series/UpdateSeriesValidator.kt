@@ -1,6 +1,5 @@
 package br.com.pokemon.tradecardgame.domain.validation.series
 
-import br.com.pokemon.tradecardgame.application.validation.CreateValidation
 import br.com.pokemon.tradecardgame.application.validation.UpdateValidation
 import br.com.pokemon.tradecardgame.domain.exception.InvalidDataException
 import br.com.pokemon.tradecardgame.domain.exception.SeriesAlreadyExistsException
@@ -29,9 +28,9 @@ import org.springframework.stereotype.Component
  */
 @Component
 @UpdateValidation
-class UpdateSeriesValidator (
+class UpdateSeriesValidator(
     private val repository: SeriesJpaAdapter
-): SerieValidator(), ValidatorStrategy<Serie>{
+) : SerieValidator(), ValidatorStrategy<Serie> {
     /**
      * Validates and processes a given series based on specific business rules.
      *

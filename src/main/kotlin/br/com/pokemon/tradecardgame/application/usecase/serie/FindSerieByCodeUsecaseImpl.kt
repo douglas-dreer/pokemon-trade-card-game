@@ -19,7 +19,7 @@ import org.springframework.stereotype.Service
 @Service
 class FindSerieByCodeUsecaseImpl(
     private val repository: SerieRepositoryPort
-): FindSerieByCodeUsecase {
+) : FindSerieByCodeUsecase {
     /**
      * Executes the use case for retrieving a `Serie` domain object based on the provided query.
      *

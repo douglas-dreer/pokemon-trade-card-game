@@ -17,5 +17,4 @@ import org.springframework.beans.factory.annotation.Qualifier
 @Target(AnnotationTarget.CLASS, AnnotationTarget.VALUE_PARAMETER)
 @Retention(AnnotationRetention.RUNTIME)
 @Qualifier
-annotation class UpdateValidation {
-}
+annotation class UpdateValidation

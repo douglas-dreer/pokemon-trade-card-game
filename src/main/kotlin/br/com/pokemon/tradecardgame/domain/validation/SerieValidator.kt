@@ -1,8 +1,7 @@
 package br.com.pokemon.tradecardgame.domain.validation
 
 import br.com.pokemon.tradecardgame.infraestruture.adapter.out.persistence.SeriesJpaAdapter
-import br.com.pokemon.tradecardgame.infraestruture.adapter.out.persistence.repository.SeriesSpringRepository
-import java.util.UUID
+import java.util.*
 
 /**
  * Abstract class responsible for defining validation methods for a series entity.
@@ -41,7 +40,6 @@ abstract class SerieValidator {
     fun checkIfExistSerieWithSameName(name: String, repository: SeriesJpaAdapter): Boolean {
         return repository.existsSerieByName(name)
     }
-
 
 
 }

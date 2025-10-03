@@ -1,6 +1,6 @@
 package br.com.pokemon.tradecardgame.domain.port.`in`.serie.command
 
-import java.util.UUID
+import java.util.*
 
 /**
  * Represents the command to delete a specific series by its unique identifier.
@@ -9,6 +9,4 @@ import java.util.UUID
  */
 data class DeleteSerieByIdCommand(
     val id: UUID
-) {
-
-}
+)

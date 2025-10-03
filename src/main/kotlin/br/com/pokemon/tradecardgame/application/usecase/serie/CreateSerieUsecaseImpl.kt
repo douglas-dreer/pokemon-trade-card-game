@@ -23,7 +23,7 @@ class CreateSerieUsecaseImpl(
     private val repository: SeriesJpaAdapter,
     @CreateValidation
     private val createValidators: List<ValidatorStrategy<Serie>>
-): CreateSerieUsecase {
+) : CreateSerieUsecase {
     /**
      * Executes the process of creating a new `Serie` in the system. This includes performing
      * necessary validations on the provided command, converting it to the appropriate domain

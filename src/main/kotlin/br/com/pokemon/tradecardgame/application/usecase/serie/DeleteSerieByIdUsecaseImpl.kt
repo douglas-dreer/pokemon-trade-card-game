@@ -1,13 +1,12 @@
 package br.com.pokemon.tradecardgame.application.usecase.serie
 
 import br.com.pokemon.tradecardgame.application.validation.DeleteValidation
-import br.com.pokemon.tradecardgame.domain.model.Serie
 import br.com.pokemon.tradecardgame.domain.port.SerieRepositoryPort
 import br.com.pokemon.tradecardgame.domain.port.`in`.serie.DeleteSerieByIdUsecase
 import br.com.pokemon.tradecardgame.domain.port.`in`.serie.command.DeleteSerieByIdCommand
 import br.com.pokemon.tradecardgame.domain.validation.ValidatorStrategy
 import org.springframework.stereotype.Service
-import java.util.UUID
+import java.util.*
 
 /**
  * Implementation of the `FindSerieByIdUsecase` interface responsible for retrieving
@@ -29,7 +28,7 @@ class DeleteSerieByIdUsecaseImpl(
     private val repository: SerieRepositoryPort,
     @DeleteValidation
     private val validator: List<ValidatorStrategy<UUID>>
-): DeleteSerieByIdUsecase {
+) : DeleteSerieByIdUsecase {
 
     /**
      * Executes the process of deleting a `Serie` by its unique identifier. This method performs
