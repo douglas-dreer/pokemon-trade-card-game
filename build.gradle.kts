@@ -3,15 +3,32 @@ val springdocVersion = "2.8.13"
 plugins {
     kotlin("jvm") version "1.9.25"
     kotlin("plugin.spring") version "1.9.25"
+    kotlin("plugin.jpa") version "1.9.25"
+
     id("org.springframework.boot") version "3.5.6"
     id("io.spring.dependency-management") version "1.1.7"
     id("org.asciidoctor.jvm.convert") version "3.3.2"
-    kotlin("plugin.jpa") version "1.9.25"
+    id("org.sonarqube") version "6.2.0.5505"
+    id("jacoco")
 }
 
 group = "br.com.tcg.pokemon"
 version = "0.0.1-SNAPSHOT"
 description = "pokemon-trade-card-game"
+
+jacoco {
+    toolVersion = "0.8.11"
+}
+
+tasks.jacocoTestReport {
+    dependsOn(tasks.test)
+
+    reports {
+        xml.required.set(true)
+        csv.required.set(false)
+        html.required.set(true)
+    }
+}
 
 java {
     toolchain {
@@ -116,3 +133,5 @@ tasks.asciidoctor {
     inputs.dir(project.extra["snippetsDir"]!!)
     dependsOn(tasks.test)
 }
+
+
