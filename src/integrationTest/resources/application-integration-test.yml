@@ -1,0 +1,61 @@
+spring:
+  profiles:
+    active: integration-test
+  
+  jpa:
+    hibernate:
+      ddl-auto: create-drop
+    show-sql: false
+    properties:
+      hibernate:
+        format_sql: false
+        highlight_sql: false
+    database-platform: org.hibernate.dialect.PostgreSQLDialect
+
+  flyway:
+    enabled: false
+
+  security:
+    oauth2:
+      resourceserver:
+        jwt:
+          issuer-uri: http://localhost:8080
+
+  # Test database configuration (will be overridden by TestContainers)
+  datasource:
+    url: jdbc:postgresql://localhost:5432/pokemon_tcg_test
+    username: test
+    password: test
+    driver-class-name: org.postgresql.Driver
+
+# Logging configuration for integration tests
+logging:
+  level:
+    br.com.tcg.pokemon: INFO
+    org.springframework.web: WARN
+    org.hibernate.SQL: WARN
+    org.testcontainers: INFO
+    com.github.dockerjava: WARN
+    org.springframework.security: WARN
+  pattern:
+    console: "%d{HH:mm:ss.SSS} [%thread] %-5level %logger{36} - %msg%n"
+
+# TestContainers configuration
+testcontainers:
+  reuse:
+    enable: true
+
+# Test execution configuration
+junit:
+  jupiter:
+    execution:
+      parallel:
+        enabled: true
+        mode:
+          default: concurrent
+        config:
+          strategy: dynamic
+          factor: 1.0
+    testinstance:
+      lifecycle:
+        default: per_class
