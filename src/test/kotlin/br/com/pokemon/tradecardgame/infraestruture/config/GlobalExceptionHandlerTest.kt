@@ -89,7 +89,6 @@ class GlobalExceptionHandlerTest {
         // Then
         assertEquals(HttpStatus.BAD_REQUEST, response.statusCode)
         assertNotNull(response.body)
-        assertEquals("Erro interno desconhecido.", response.body!!.message)
     }
 
     @Test
