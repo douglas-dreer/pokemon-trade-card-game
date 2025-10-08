@@ -49,6 +49,10 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-gradle-
 
+      # PASSO ESPIÃO: Adicione isso aqui!
+      - name: Verify gradle wrapper files
+        run: ls -laR ./gradle
+
       - name: Make gradlew executable
         run: chmod +x ./gradlew
 
