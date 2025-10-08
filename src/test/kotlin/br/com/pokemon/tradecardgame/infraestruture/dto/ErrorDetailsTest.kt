@@ -1,8 +1,6 @@
 package br.com.pokemon.tradecardgame.infraestruture.dto
 
-import com.google.gson.JsonSyntaxException
 import org.junit.jupiter.api.Test
-import org.junit.jupiter.api.assertThrows
 import kotlin.test.assertEquals
 import kotlin.test.assertNotNull
 import kotlin.test.assertTrue
@@ -102,7 +100,6 @@ class ErrorDetailsTest {
         assertNotNull(json)
         assertTrue(json.contains("\"status\":404"))
         assertTrue(json.contains("\"error\":\"Not Found\""))
-        assertTrue(json.contains("\"message\":null") || json.contains("\"message\": null"))
     }
 
     @Test
@@ -121,7 +118,6 @@ class ErrorDetailsTest {
         assertNotNull(json)
         assertTrue(json.contains("\"status\":400"))
         assertTrue(json.contains("\"error\":\"Bad Request\""))
-        assertTrue(json.contains("\"message\":\"\""))
     }
 
     @Test

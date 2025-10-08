@@ -97,6 +97,14 @@ dependencies {
 
     // H2 Database (in-memory para testes)
     testImplementation("com.h2database:h2")
+
+    // Mockk
+    testImplementation("io.mockk:mockk:1.13.10")
+
+    // TestContainers
+    testImplementation(platform("org.testcontainers:testcontainers-bom:1.21.3"))
+    testImplementation("org.testcontainers:junit-jupiter")
+    testImplementation("org.testcontainers:postgresql")
 }
 
 dependencyManagement {

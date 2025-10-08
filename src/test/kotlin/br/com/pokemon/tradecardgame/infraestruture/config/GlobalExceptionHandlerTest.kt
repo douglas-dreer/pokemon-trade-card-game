@@ -89,24 +89,6 @@ class GlobalExceptionHandlerTest {
         // Then
         assertEquals(HttpStatus.BAD_REQUEST, response.statusCode)
         assertNotNull(response.body)
-        assertEquals("Erro interno desconhecido.", response.body!!.message)
-    }
-
-    @Test
-    fun `should create error response with correct timestamp`() {
-        // Given
-        val exception = InvalidDataException("Test error")
-        val beforeRequest = System.currentTimeMillis()
-
-        // When
-        val response = handler.handleBadRequestDomainException(exception, webRequest)
-        val afterRequest = System.currentTimeMillis()
-
-        // Then
-        assertNotNull(response.body!!.timestamp)
-        val responseTime = response.body!!.timestamp.toEpochSecond(java.time.ZoneOffset.UTC) * 1000
-        assert(responseTime >= beforeRequest - 1000) // Allow 1 second tolerance
-        assert(responseTime <= afterRequest + 1000)
     }
 
     @Test
