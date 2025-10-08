@@ -8,18 +8,14 @@ on:
   pull_request:
     branches: [ main, develop ]
 
-# Controle de concorrência: cancela builds antigos na mesma branch quando um novo commit chega.
-# Isso economiza tempo de máquina e dinheiro!
 concurrency:
   group: ${{ github.workflow }}-${{ github.head_ref || github.ref }}
   cancel-in-progress: true
 
 env:
   JAVA_VERSION: '21'
-  # O nome da sua imagem Docker. Padronizando para o GitHub Container Registry (GHCR).
   IMAGE_NAME: ghcr.io/${{ github.repository }}
 
-# Permissões globais para os jobs. É uma boa prática de segurança começar com o mínimo necessário.
 permissions:
   contents: read
 
@@ -27,7 +23,7 @@ jobs:
   test:
     name: 🧪 Rodar Testes
     runs-on: ubuntu-latest
-    timeout-minutes: 20 # Garante que não ficaremos presos aqui por muito tempo (se algo der errado)
+    timeout-minutes: 20
     
     services:
       postgres:
@@ -53,8 +49,7 @@ jobs:
         with:
           java-version: ${{ env.JAVA_VERSION }}
           distribution: 'temurin'
-      
-      # Caching super otimizado com a action oficial do Gradle
+
       - name: Configurar Gradle com Caching Inteligente
         uses: gradle/actions/setup-gradle@v3
         with:
@@ -63,18 +58,16 @@ jobs:
       - name: Dar permissão de execução para o gradlew
         run: chmod +x ./gradlew
 
-      # Juntamos os comandos para otimizar o tempo de inicialização do Gradle
-      - name: Rodar testes (Unitários e Integração) e gerar relatórios
-        run: ./gradlew test integrationTest jacocoFullReport testSummaryReport --continue
+      - name: Rodar testes e gerar relatório de cobertura
+        run: ./gradlew test integrationTest jacocoTestReport --continue
         env:
-          # Passando as credenciais do banco para os testes de integração
           SPRING_DATASOURCE_URL: jdbc:postgresql://localhost:5432/pokemon_tcg_test
           SPRING_DATASOURCE_USERNAME: testuser
           SPRING_DATASOURCE_PASSWORD: testpassword
 
       - name: Enviar resultados dos testes como artefato
         uses: actions/upload-artifact@v4
-        if: always() # Sempre executa, mesmo que os testes falhem
+        if: always()
         with:
           name: test-results
           path: |
@@ -183,10 +176,10 @@ jobs:
     name: 🚀 Publicar Imagem no GHCR
     runs-on: ubuntu-latest
     needs: build
-    if: github.ref == 'refs/heads/main' # Só executa em pushes para a main
+    if: github.ref == 'refs/heads/main'
     
     permissions:
-      packages: write # Permissão especial para publicar pacotes/imagens
+      packages: write
       contents: read
 
     steps:
@@ -202,7 +195,7 @@ jobs:
       - name: Configurar Gradle com Caching Inteligente
         uses: gradle/actions/setup-gradle@v3
         with:
-          cache-read-only: true # Em publish, só lemos o cache
+          cache-read-only: true
 
       - name: Dar permissão de execução para o gradlew
         run: chmod +x ./gradlew
