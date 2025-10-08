@@ -1,34 +1,20 @@
-val springdocVersion = "2.8.13"
-
 plugins {
-    kotlin("jvm") version "1.9.25"
-    kotlin("plugin.spring") version "1.9.25"
-    kotlin("plugin.jpa") version "1.9.25"
+    alias(libs.plugins.kotlin.jvm)
+    alias(libs.plugins.kotlin.spring)
+    alias(libs.plugins.kotlin.jpa)
+    alias(libs.plugins.kotlin.allopen)
 
-    id("org.springframework.boot") version "3.5.6"
-    id("io.spring.dependency-management") version "1.1.7"
-    id("org.asciidoctor.jvm.convert") version "3.3.2"
-    id("org.sonarqube") version "6.2.0.5505"
+    alias(libs.plugins.spring.boot)
+    alias(libs.plugins.spring.dependency.management)
+    alias(libs.plugins.sonarqube)
+    alias(libs.plugins.asciidoctor)
+
     id("jacoco")
 }
 
 group = "br.com.tcg.pokemon"
 version = "0.0.1-SNAPSHOT"
 description = "pokemon-trade-card-game"
-
-jacoco {
-    toolVersion = "0.8.11"
-}
-
-tasks.jacocoTestReport {
-    dependsOn(tasks.test)
-
-    reports {
-        xml.required.set(true)
-        csv.required.set(false)
-        html.required.set(true)
-    }
-}
 
 java {
     toolchain {
@@ -40,76 +26,73 @@ repositories {
     mavenCentral()
 }
 
-extra["snippetsDir"] = file("build/generated-snippets")
-extra["springCloudVersion"] = "2025.0.0"
+jacoco {
+    toolVersion = libs.versions.jacoco.get()
+}
 
+tasks.jacocoTestReport {
+    dependsOn(tasks.test, "integrationTest")
+
+    executionData.setFrom(fileTree(layout.buildDirectory).include("**/jacoco/*.exec"))
+
+    reports {
+        xml.required.set(true)
+        csv.required.set(false)
+        html.required.set(true)
+    }
+}
+
+// Voltando para a declaração individual, que é a forma correta e funcional.
 dependencies {
     // ========== Spring Boot Starters ==========
-    implementation("org.springframework.boot:spring-boot-starter-web")
-    implementation("org.springframework.boot:spring-boot-starter-data-jpa")
-    implementation("org.springframework.boot:spring-boot-starter-actuator")
-    implementation("org.springframework.boot:spring-boot-starter-security")
+    implementation(libs.spring.boot.starter.web)
+    implementation(libs.spring.boot.starter.data.jpa)
+    implementation(libs.spring.boot.starter.actuator)
+    implementation(libs.spring.boot.starter.security)
+    implementation(libs.spring.boot.starter.kafka)
 
     // ========== Security ==========
-    implementation("org.springframework.security:spring-security-oauth2-resource-server")
-    implementation("org.springframework.security:spring-security-oauth2-jose")
+    implementation(libs.spring.security.oauth2.resource.server)
+    implementation(libs.spring.security.oauth2.jose)
 
     // ========== Database & Migrations ==========
-    runtimeOnly("org.postgresql:postgresql")
-    implementation("org.flywaydb:flyway-core")
-    implementation("org.flywaydb:flyway-database-postgresql:11.7.2")
-
-    // ========== Messaging (Kafka) ==========
-    implementation("org.apache.kafka:kafka-streams")
-    implementation("org.springframework.kafka:spring-kafka")
+    runtimeOnly(libs.postgresql)
+    implementation(libs.flyway.core)
+    implementation(libs.flyway.postgresql)
 
     // ========== HTTP Client ==========
-    implementation("org.springframework.cloud:spring-cloud-starter-openfeign")
+    implementation(libs.spring.cloud.starter.openfeign)
 
-    // ========== Kotlin ==========
-    implementation("org.jetbrains.kotlin:kotlin-reflect")
-    implementation("com.fasterxml.jackson.module:jackson-module-kotlin")
+    // ========== Kotlin & Jackson ==========
+    implementation(libs.kotlin.reflect)
+    implementation(libs.jackson.module.kotlin)
 
-     // ========== OpenAPI/Swagger ==========
-    implementation("org.springdoc:springdoc-openapi-starter-webmvc-ui:${springdocVersion}")
+    // ========== OpenAPI/Swagger ==========
+    implementation(libs.springdoc.openapi.starter.webmvc.ui)
+
+    // ========== Outras Libs ==========
+    implementation(libs.gson)
 
     // ========== Development Tools ==========
-    developmentOnly("org.springframework.boot:spring-boot-devtools")
-    developmentOnly("org.springframework.boot:spring-boot-docker-compose")
-
-    // ========== Gson =============
-    implementation("com.google.code.gson:gson:2.13.2")
+    developmentOnly(libs.spring.boot.devtools)
+    developmentOnly(libs.spring.boot.docker.compose)
 
     // ========== Testing ==========
-    // JUnit & Spring Boot Test
-    testImplementation("org.springframework.boot:spring-boot-starter-test")
-    testImplementation("org.jetbrains.kotlin:kotlin-test-junit5")
-    testRuntimeOnly("org.junit.platform:junit-platform-launcher")
-
-    // Spring Security Test
-    testImplementation("org.springframework.security:spring-security-test")
-
-    // Kafka Test
-    testImplementation("org.springframework.kafka:spring-kafka-test")
-
-    // REST Docs
-    testImplementation("org.springframework.restdocs:spring-restdocs-mockmvc")
-
-    // H2 Database (in-memory para testes)
-    testImplementation("com.h2database:h2")
-
-    // Mockk
-    testImplementation("io.mockk:mockk:1.13.10")
-
-    // TestContainers
-    testImplementation(platform("org.testcontainers:testcontainers-bom:1.21.3"))
-    testImplementation("org.testcontainers:junit-jupiter")
-    testImplementation("org.testcontainers:postgresql")
+    testImplementation(libs.spring.boot.starter.test)
+    testImplementation(libs.kotlin.test.junit5)
+    testRuntimeOnly(libs.junit.platform.launcher)
+    testImplementation(libs.spring.security.test)
+    testImplementation(libs.spring.kafka.test)
+    testImplementation(libs.spring.restdocs.mockmvc)
+    testImplementation(libs.mockk)
+    testImplementation(platform(libs.testcontainers.bom))
+    testImplementation(libs.testcontainers.junit.jupiter)
+    testImplementation(libs.testcontainers.postgresql)
 }
 
 dependencyManagement {
     imports {
-        mavenBom("org.springframework.cloud:spring-cloud-dependencies:${property("springCloudVersion")}")
+        mavenBom("org.springframework.cloud:spring-cloud-dependencies:${libs.versions.springCloud.get()}")
     }
 }
 
@@ -130,8 +113,11 @@ tasks.withType<Test> {
 }
 
 tasks.bootBuildImage {
+    imageName = "ghcr.io/${project.group}/${project.name}:${project.version}"
     runImage = "paketobuildpacks/ubuntu-noble-run-base:latest"
 }
+
+extra["snippetsDir"] = file("build/generated-snippets")
 
 tasks.test {
     outputs.dir(project.extra["snippetsDir"]!!)
@@ -142,4 +128,30 @@ tasks.asciidoctor {
     dependsOn(tasks.test)
 }
 
+sourceSets {
+    create("integrationTest") {
+        compileClasspath += sourceSets.main.get().output
+        runtimeClasspath += sourceSets.main.get().output
+    }
+}
 
+configurations {
+    val integrationTestImplementation by getting {
+        extendsFrom(implementation.get())
+    }
+    "integrationTestRuntimeOnly" {
+        extendsFrom(runtimeOnly.get())
+    }
+}
+
+tasks.register<Test>("integrationTest") {
+    description = "Roda os testes de integração."
+    group = "verification"
+    testClassesDirs = sourceSets.getByName("integrationTest").output.classesDirs
+    classpath = sourceSets.getByName("integrationTest").runtimeClasspath
+    shouldRunAfter(tasks.test)
+}
+
+tasks.check {
+    dependsOn("integrationTest")
+}

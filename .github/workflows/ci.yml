@@ -27,6 +27,7 @@ jobs:
   test:
     name: 🧪 Rodar Testes
     runs-on: ubuntu-latest
+    timeout-minutes: 20 # Garante que não ficaremos presos aqui por muito tempo (se algo der errado)
     
     services:
       postgres:
