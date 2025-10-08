@@ -108,14 +108,18 @@ allOpen {
     annotation("jakarta.persistence.Embeddable")
 }
 
-sonarqube {
+sonar {
     properties {
         property("sonar.host.url", "https://sonarcloud.io")
-        property("sonar.projectName", "pokemon-trade-card-game")
         property("sonar.qualitygate.wait", true)
 
         System.getenv("SONAR_ORGANIZATION")?.let { property("sonar.organization", it) }
         System.getenv("SONAR_PROJECT_KEY")?.let { property("sonar.projectKey", it) }
+        property("sonar.token", System.getenv("SONAR_TOKEN") ?: "")
+
+        // Configurações de cobertura
+        property("sonar.coverage.jacoco.xmlReportPaths", "build/reports/jacoco/test/jacocoTestReport.xml")
+        property("sonar.java.binaries", "build/classes")
     }
 }
 
