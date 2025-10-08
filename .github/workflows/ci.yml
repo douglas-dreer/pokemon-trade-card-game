@@ -1,4 +1,6 @@
-name: CI Pipeline
+# .github/workflows/ci.yml
+
+name: CI/CD Pipeline Profissional
 
 on:
   push:
@@ -6,20 +8,32 @@ on:
   pull_request:
     branches: [ main, develop ]
 
+# Controle de concorrência: cancela builds antigos na mesma branch quando um novo commit chega.
+# Isso economiza tempo de máquina e dinheiro!
+concurrency:
+  group: ${{ github.workflow }}-${{ github.head_ref || github.ref }}
+  cancel-in-progress: true
+
 env:
   JAVA_VERSION: '21'
-  GRADLE_OPTS: -Dorg.gradle.daemon=false -Dorg.gradle.parallel=true -Dorg.gradle.jvmargs="-Xmx4g"
+  # O nome da sua imagem Docker. Padronizando para o GitHub Container Registry (GHCR).
+  IMAGE_NAME: ghcr.io/${{ github.repository }}
+
+# Permissões globais para os jobs. É uma boa prática de segurança começar com o mínimo necessário.
+permissions:
+  contents: read
 
 jobs:
   test:
-    name: Run Tests
+    name: 🧪 Rodar Testes
     runs-on: ubuntu-latest
     
     services:
       postgres:
         image: postgres:15-alpine
         env:
-          POSTGRES_PASSWORD: postgres
+          POSTGRES_USER: testuser
+          POSTGRES_PASSWORD: testpassword
           POSTGRES_DB: pokemon_tcg_test
         options: >-
           --health-cmd pg_isready
@@ -30,155 +44,174 @@ jobs:
           - 5432:5432
     
     steps:
-      - name: Checkout code
+      - name: Checkout do código
         uses: actions/checkout@v4
 
-      - name: Set up JDK ${{ env.JAVA_VERSION }}
+      - name: Configurar JDK ${{ env.JAVA_VERSION }}
         uses: actions/setup-java@v4
         with:
           java-version: ${{ env.JAVA_VERSION }}
           distribution: 'temurin'
-
-      - name: Cache Gradle packages
-        uses: actions/cache@v4
+      
+      # Caching super otimizado com a action oficial do Gradle
+      - name: Configurar Gradle com Caching Inteligente
+        uses: gradle/actions/setup-gradle@v3
         with:
-          path: |
-            ~/.gradle/caches
-            ~/.gradle/wrapper
-          key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle*', '**/gradle-wrapper.properties') }}
-          restore-keys: |
-            ${{ runner.os }}-gradle-
+          cache-read-only: ${{ github.ref != 'refs/heads/main' }}
 
-      # PASSO ESPIÃO: Adicione isso aqui!
-      - name: Verify gradle wrapper files
-        run: ls -laR ./gradle
-
-      - name: Make gradlew executable
+      - name: Dar permissão de execução para o gradlew
         run: chmod +x ./gradlew
 
-      - name: Run unit tests
-        run: ./gradlew test --continue --no-daemon
+      # Juntamos os comandos para otimizar o tempo de inicialização do Gradle
+      - name: Rodar testes (Unitários e Integração) e gerar relatórios
+        run: ./gradlew test integrationTest jacocoFullReport testSummaryReport --continue
+        env:
+          # Passando as credenciais do banco para os testes de integração
+          SPRING_DATASOURCE_URL: jdbc:postgresql://localhost:5432/pokemon_tcg_test
+          SPRING_DATASOURCE_USERNAME: testuser
+          SPRING_DATASOURCE_PASSWORD: testpassword
 
-      - name: Run integration tests
-        run: ./gradlew integrationTest --continue --no-daemon
-
-      - name: Generate test reports
-        run: |
-          ./gradlew jacocoFullReport --no-daemon
-          ./gradlew testSummaryReport --no-daemon
-
-      - name: Upload test results
+      - name: Enviar resultados dos testes como artefato
         uses: actions/upload-artifact@v4
-        if: always()
+        if: always() # Sempre executa, mesmo que os testes falhem
         with:
           name: test-results
           path: |
-            build/reports/tests/
-            build/reports/jacoco/
+            build/reports/
             build/test-results/
 
-      - name: Upload coverage reports to Codecov
-        uses: codecov/codecov-action@v4
-        with:
-          file: build/reports/jacoco/full/jacocoTestReport.xml
-          flags: unittests
-          name: codecov-umbrella
-
-      - name: Comment PR with test results
-        uses: actions/github-script@v7
-        if: github.event_name == 'pull_request'
-        with:
-          script: |
-            const fs = require('fs');
-            const path = 'build/reports/test-summary.html';
-            
-            if (fs.existsSync(path)) {
-              const summary = fs.readFileSync(path, 'utf8');
-              github.rest.issues.createComment({
-                issue_number: context.issue.number,
-                owner: context.repo.owner,
-                repo: context.repo.repo,
-                body: '## Test Results\n\nTest summary report has been generated. Check the artifacts for detailed results.'
-              });
-            }
-
   build:
-    name: Build Application
+    name: 📦 Construir Aplicação e Imagem Docker
     runs-on: ubuntu-latest
-    needs: test
+    needs: test # Só roda depois que os testes passarem
     
     steps:
-      - name: Checkout code
+      - name: Checkout do código
         uses: actions/checkout@v4
 
-      - name: Set up JDK ${{ env.JAVA_VERSION }}
+      - name: Configurar JDK ${{ env.JAVA_VERSION }}
         uses: actions/setup-java@v4
         with:
           java-version: ${{ env.JAVA_VERSION }}
           distribution: 'temurin'
 
-      - name: Cache Gradle packages
-        uses: actions/cache@v4
+      - name: Configurar Gradle com Caching Inteligente
+        uses: gradle/actions/setup-gradle@v3
         with:
-          path: |
-            ~/.gradle/caches
-            ~/.gradle/wrapper
-          key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle*', '**/gradle-wrapper.properties') }}
-          restore-keys: |
-            ${{ runner.os }}-gradle-
+          cache-read-only: ${{ github.ref != 'refs/heads/main' }}
 
-      - name: Make gradlew executable
+      - name: Dar permissão de execução para o gradlew
         run: chmod +x ./gradlew
 
-      - name: Build application
-        run: ./gradlew build -x test --no-daemon
+      - name: Construir a aplicação com Gradle
+        run: ./gradlew build -x test
 
-      - name: Build Docker image
-        run: ./gradlew bootBuildImage --no-daemon
+      - name: Construir Imagem Docker com Spring Boot
+        run: ./gradlew bootBuildImage --imageName ${{ env.IMAGE_NAME }}:${{ github.sha }}
 
-      - name: Upload build artifacts
+      - name: Enviar build como artefato
         uses: actions/upload-artifact@v4
         with:
           name: build-artifacts
-          path: |
-            build/libs/
-            build/reports/
+          path: build/libs/*.jar
 
   quality:
-    name: Code Quality Analysis
+    name: 📊 Análise de Qualidade de Código
     runs-on: ubuntu-latest
     needs: test
     
     steps:
-      - name: Checkout code
+      - name: Checkout do código
         uses: actions/checkout@v4
         with:
-          fetch-depth: 0  # Shallow clones should be disabled for better analysis
+          fetch-depth: 0 # Necessário para o SonarQube analisar o histórico
 
-      - name: Set up JDK ${{ env.JAVA_VERSION }}
+      - name: Configurar JDK ${{ env.JAVA_VERSION }}
         uses: actions/setup-java@v4
         with:
           java-version: ${{ env.JAVA_VERSION }}
           distribution: 'temurin'
 
-      - name: Cache Gradle packages
-        uses: actions/cache@v4
+      - name: Configurar Gradle com Caching Inteligente
+        uses: gradle/actions/setup-gradle@v3
         with:
-          path: |
-            ~/.gradle/caches
-            ~/.gradle/wrapper
-          key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle*', '**/gradle-wrapper.properties') }}
-          restore-keys: |
-            ${{ runner.os }}-gradle-
+          cache-read-only: ${{ github.ref != 'refs/heads/main' }}
 
-      - name: Make gradlew executable
+      - name: Dar permissão de execução para o gradlew
         run: chmod +x ./gradlew
 
-      - name: Run SonarQube analysis
+      - name: Baixar resultados dos testes (para relatório de cobertura)
+        uses: actions/download-artifact@v4
+        with:
+          name: test-results
+          path: build/
+
+      - name: Rodar análise do SonarQube
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
-        run: ./gradlew sonarqube --no-daemon
+        run: ./gradlew sonarqube
 
-      - name: Check coverage thresholds
-        run: ./gradlew jacocoTestCoverageVerification --no-daemon
+  security:
+    name: 🛡️ Análise de Segurança
+    runs-on: ubuntu-latest
+    needs: test
+
+    steps:
+      - name: Checkout do código
+        uses: actions/checkout@v4
+
+      - name: Configurar JDK ${{ env.JAVA_VERSION }}
+        uses: actions/setup-java@v4
+        with:
+          java-version: ${{ env.JAVA_VERSION }}
+          distribution: 'temurin'
+
+      - name: Configurar Gradle com Caching Inteligente
+        uses: gradle/actions/setup-gradle@v3
+        with:
+          cache-read-only: ${{ github.ref != 'refs/heads/main' }}
+
+      - name: Dar permissão de execução para o gradlew
+        run: chmod +x ./gradlew
+
+      - name: Rodar análise de vulnerabilidades (OWASP)
+        run: ./gradlew dependencyCheckAnalyze --info
+
+  publish:
+    name: 🚀 Publicar Imagem no GHCR
+    runs-on: ubuntu-latest
+    needs: build
+    if: github.ref == 'refs/heads/main' # Só executa em pushes para a main
+    
+    permissions:
+      packages: write # Permissão especial para publicar pacotes/imagens
+      contents: read
+
+    steps:
+      - name: Checkout do código
+        uses: actions/checkout@v4
+
+      - name: Configurar JDK ${{ env.JAVA_VERSION }}
+        uses: actions/setup-java@v4
+        with:
+          java-version: ${{ env.JAVA_VERSION }}
+          distribution: 'temurin'
+
+      - name: Configurar Gradle com Caching Inteligente
+        uses: gradle/actions/setup-gradle@v3
+        with:
+          cache-read-only: true # Em publish, só lemos o cache
+
+      - name: Dar permissão de execução para o gradlew
+        run: chmod +x ./gradlew
+
+      - name: Login no GitHub Container Registry
+        uses: docker/login-action@v3
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Construir e Publicar a imagem Docker
+        run: ./gradlew bootBuildImage --imageName ${{ env.IMAGE_NAME }}:latest
