@@ -108,6 +108,17 @@ allOpen {
     annotation("jakarta.persistence.Embeddable")
 }
 
+sonarqube {
+    properties {
+        property("sonar.host.url", "https://sonarcloud.io")
+        property("sonar.projectName", "pokemon-trade-card-game")
+        property("sonar.qualitygate.wait", true)
+
+        System.getenv("SONAR_ORGANIZATION")?.let { property("sonar.organization", it) }
+        System.getenv("SONAR_PROJECT_KEY")?.let { property("sonar.projectKey", it) }
+    }
+}
+
 tasks.withType<Test> {
     useJUnitPlatform()
 }
